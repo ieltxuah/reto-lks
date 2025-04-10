@@ -146,3 +146,9 @@ docker rm chatbot
 docker rm keycloak
 docker rm mysql-server
 ```
+
+## Proyectos Relacionados
+
+Este proyecto se basa en el repositorio de Angular [CHATBOT](https://github.com/Miikeel16/CHATBOT). La aplicación ha sido adaptada para funcionar de manera completa con una base de datos MySQL y Keycloak para la gestión de autenticación y autorización. 
+
+Además, incluye un tema personalizado para el login utilizando Keycloak.
