@@ -1,0 +1,51 @@
+<div class="flex flex-col sm:flex-row w-full">
+  <!-- Contenedor principal en columna en móviles y fila en pantallas grandes -->
+
+  <p
+    class="fixed top-2 right-4 z-50 bg-gray-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition flex items-center gap-2">
+    <!-- Barra superior fija a la derecha para login/logout -->
+
+    @if (!authenticated) {
+      <!-- Si no está autenticado muestra botón de login -->
+      <button class="cursor-pointer" (click)="login()">Login</button>
+    } @else {
+      <!-- Si está autenticado muestra usuario y botón logout -->
+      <button class="cursor-pointer" (click)="logout()">
+        <span>{{this.user}}  -</span> Logout
+      </button>
+    }
+  </p>
+
+  <!-- Componente lateral del dashboard (como la lista de chats) -->
+  <dashboard [chats]="chat()" />
+
+  <div class="w-full">
+    <!-- Título de la app -->
+    <h2 class="m-4 pb-2 text-lg font-semibold border-b border-black-300 flex items-center">
+      <img src="lks-logo.png" class="h-8 w-8 mr-2">
+      ChatLKS
+    </h2>
+
+    <!-- Componente del chat actual -->
+    <chat-current [chats]="chat()"></chat-current>
+
+    <!-- Input y botón para enviar mensajes -->
+    <div class="mt-6 flex justify-center w-full">
+      <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center space-x-2 w-[90%] max-w-lg sm:w-[80%]">
+        <!-- Caja de entrada de texto -->
+        <fieldset class="fieldset w-full">
+          <input type="text" class="input w-full" placeholder="Escribe aquí" #txtchat
+            (keyup.enter)="enviarMensaje(txtchat.value)" />
+        </fieldset>
+
+        <!-- Botón de enviar mensaje -->
+        <button class="btn btn-circle" (click)="enviarMensaje(txtchat.value)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M1.946 9.315c-.522-.174-.527-.455.01-.634L21.044 2.32c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8l-8 6z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

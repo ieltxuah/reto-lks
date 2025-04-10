@@ -1,0 +1,113 @@
+<div class="flex flex-col sm:flex-row w-full">
+  <!-- Contenedor principal que se adapta: columna en móviles, fila en pantallas grandes -->
+
+  <div
+    class="min-h-screen w-64 sm:w-55 sm:relative fixed inset-y-0 left-0 bg-white z-50 transform transition-transform duration-300 ease-in-out"
+    [class.-translate-x-full]="isSidebarHidden">
+    <!-- Sidebar fija a la izquierda con animación al ocultarse -->
+
+    <div class="flex w-full max-w-xs pt-4 bg-white">
+      <ul class="flex flex-col w-full">
+
+        <li class="my-px">
+          <!-- Sección para crear nuevo chat -->
+
+          <div class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600">
+            <!-- Icono de más (crear nuevo chat) -->
+            <span class="flex items-center justify-center text-lg text-gray-400 cursor-pointer"
+              (click)="this.authenticated ? nuevoChat(txtnew.value) : null">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                  d="M11 8v3H8v2h3v3h2v-3h3v-2h-3V8zm2-5.95v3.03c3.39.49 6 3.39 6 6.92c0 .9-.18 1.75-.48 2.54l2.6 1.53c.56-1.24.88-2.62.88-4.07c0-5.18-3.95-9.45-9-9.95M12 19c-3.87 0-7-3.13-7-7c0-3.53 2.61-6.43 6-6.92V2.05c-5.06.5-9 4.76-9 9.95c0 5.52 4.47 10 9.99 10c3.31 0 6.24-1.61 8.06-4.09l-2.6-1.53A6.95 6.95 0 0 1 12 19" />
+              </svg>
+            </span>
+
+            <!-- Input para nombre del nuevo chat -->
+            <input type="text" class="m-3 w-full border-2 rounded-lg border-gray-300 p-1 transition-all duration-500"
+              [class.shake]="inputError()" #txtnew (keyup.enter)="this.authenticated ? nuevoChat(txtnew.value) : null"
+              maxlength="30" [disabled]="!this.authenticated || chats.length >= 10"
+              [placeholder]="this.authenticated ? (chats.length >= 10 ? 'Máximos creados' : 'Nuevo Chat') : 'Solo para usuarios'">
+          </div>
+        </li>
+
+        <li class="my-px flex items-center ">
+          <!-- Título de sección -->
+          <span class="font-medium text-sm text-gray-400 uppercase ml-2">Chats</span>
+        </li>
+
+        <!-- Listado de chats -->
+        @for (chat of chats; track $index) {
+        @if (chat.titulo) {
+        <li class="my-px">
+          <a [routerLink]="['/', chat.titulo]" routerLinkActive="bg-gray-100 shadow-md"
+            class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 hover:bg-gray-100 w-full justify-between">
+
+            <div class="flex flex-row items-center">
+              <!-- Icono de mensaje -->
+              <span class="flex items-center justify-center text-lg text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89l.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7s-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.95 8.95 0 0 0 13 21a9 9 0 0 0 0-18m-1 5v5l4.28 2.54l.72-1.21l-3.5-2.08V8z" />
+                </svg>
+              </span>
+
+              <!-- Título del chat -->
+              <span class="ml-3 overflow-hidden whitespace-nowrap text-ellipsis max-w-[120px] block"
+                [title]="chat.titulo">
+                {{ chat.titulo }}
+              </span>
+            </div>
+
+            <!-- Botón de eliminar chat -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              class="cursor-pointer hover:text-red-500" (click)="eliminarChat($index, chat.titulo)">
+              <path fill="currentColor"
+                d="M9 3v1H4v2h1v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1V4h-5V3zm0 5h2v9H9zm4 0h2v9h-2z" />
+            </svg>
+          </a>
+        </li>
+        }
+        }
+
+        <!-- Opción de chat temporal -->
+        <li class="my-px mb-4">
+          <a routerLink="/" routerLinkActive="bg-gray-100 shadow-md" [routerLinkActiveOptions]="{ exact: true }"
+            class="flex flex-row items-center h-12 px-4 rounded-lg text-gray-600 hover:bg-gray-100 w-full justify-between">
+            <div class="flex flex-row items-center">
+              <span class="flex items-center justify-center text-lg text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M5 22q-.825 0-1.412-.587T3 20V6q0-.825.588-1.412T5 4h1V2h2v2h8V2h2v2h1q.825 0 1.413.588T21 6v4.675q0 .425-.288.713t-.712.287t-.712-.288t-.288-.712V10H5v10h5.8q.425 0 .713.288T11.8 21t-.288.713T10.8 22zm13 1q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23m1.675-2.625l.7-.7L18.5 17.8V15h-1v3.2z" />
+                </svg>
+              </span>
+              <span class="ml-3">Temporal</span>
+            </div>
+          </a>
+        </li>
+
+        <!-- Botón para eliminar todos los chats si existen -->
+        @if (hayChatsValidos()) {
+        <li class="flex justify-between items-center">
+          <button
+            class="cursor-pointer flex items-center gap-2 bg-red-400 text-white px-3 py-1 rounded hover:bg-red-600 ml-3"
+            (click)="eliminarTodosLosChats()">
+            Borrar chats
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12 2c5.53 0 10 4.47 10 10s-4.47 10-10 10S2 17.53 2 12S6.47 2 12 2m5 5h-2.5l-1-1h-3l-1 1H7v2h10zM9 18h6a1 1 0 0 0 1-1v-7H8v7a1 1 0 0 0 1 1" />
+            </svg>
+          </button>
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante para ocultar/mostrar el sidebar en móviles -->
+<button (click)="toggleSidebar()" class="sm:hidden p-2 bg-gray-400 text-white rounded-full absolute top-4 right-4 z-50">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <path fill="currentColor"
+      d="M7.5 14.5V9.116q0-.672.472-1.144T9.116 7.5h8.957l-3.075-3.075l.714-.713L20 8l-4.288 4.308l-.714-.708l3.075-3.1H9.115q-.269 0-.442.173t-.173.443V14.5zM5.616 20q-.672 0-1.144-.472T4 18.385V4.615h1v13.77q0 .269.173.442t.443.173h10.769q.269 0 .442-.173t.173-.442V14.5h1v3.885q0 .67-.472 1.143q-.472.472-1.143.472z" />
+  </svg>
+</button>

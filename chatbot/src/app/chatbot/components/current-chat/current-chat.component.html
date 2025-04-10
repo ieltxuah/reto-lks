@@ -1,0 +1,48 @@
+<!-- Contenedor principal con márgenes, padding, fondo gris claro, bordes redondeados, sombra y altura fija.
+     También permite hacer scroll vertical si el contenido es muy largo. -->
+     <div class="m-4 p-4 bg-gray-100 rounded-lg shadow-md h-130 overflow-y-auto" #scrollContainer>
+
+      <!-- Título del chat: si hay un nombre de chat (query()), se muestra; si no, se muestra 'Chat Temporal'. -->
+      <h2 class="pb-2 text-lg font-semibold border-b border-gray-300">
+        {{ query() ? query() : 'Chat Temporal' }}
+      </h2>
+
+      <!-- Contenedor para los mensajes del chat, con espacio vertical entre ellos y margen superior. -->
+      <div class="space-y-3 mt-3">
+
+        <!-- Bucle para recorrer todos los chats almacenados en chats().
+             track $index ayuda a Angular a identificar cada elemento para optimizar el renderizado. -->
+        @for (chat of chats(); track $index) {
+
+          <!-- Se filtra para mostrar solo el chat cuyo título sea igual al seleccionado (query()),
+               o si el título es nulo (caso de chat temporal o sin nombre). -->
+          @if (chat.titulo===query() || chat.titulo===null) {
+
+            <!-- Bucle interno para recorrer todos los mensajes del chat actual. -->
+            @for (contenido of chat.mensajes; track $index) {
+
+              <!-- Si el mensaje es del usuario, se alinea a la derecha y tiene estilo azul. -->
+              @if (contenido.tipo=='usuario') {
+              <div class="flex justify-end break-words text-justify">
+                <div class="bg-blue-500 text-white p-2 rounded-lg w-fit max-w-full sm:max-w-4xl">
+                  {{contenido.texto}}
+                </div>
+              </div>
+
+              <!-- Si el mensaje no es del usuario (es del bot o sistema), se alinea a la izquierda con fondo gris. -->
+              } @else {
+              <div class="flex justify-start break-words text-justify">
+                <div class="w-fit max-w-full sm:max-w-4xl">
+                  <div class="text-sm text-gray-500">ChatLKS</div> <!-- Nombre del bot o sistema que responde -->
+                  <div class="bg-gray-300 text-black p-2 rounded-lg w-fit max-w-full sm:max-w-4xl">
+                    {{contenido.texto}}
+                  </div>
+                </div>
+              </div>
+              }
+            }
+          }
+        }
+
+      </div>
+    </div>
